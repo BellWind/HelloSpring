@@ -13,7 +13,12 @@ public class Main {
 //        Car car = (Car)ctx.getBean(Car.class);
 //        System.out.println(car);
 
-        Person p1 = (Person)ctx.getBean("p1", Person.class);
-        System.out.println(p1);
+//        Person p1 = (Person)ctx.getBean("p1", Person.class);
+//        Person p2 = (Person)ctx.getBean("p1", Person.class);
+//
+//        System.out.println(p1 == p2);
+
+        Person p = (Person)ctx.getBean("p5", Person.class);
+        System.out.println(p);
     }
 }

@@ -3,6 +3,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
@@ -35,14 +36,26 @@
     <!--&lt;!&ndash; 在实际开发中通常都需配置 mvc:annotation-driven 标签 &ndash;&gt;-->
     <!--<mvc:annotation-driven></mvc:annotation-driven>-->
 
-    <bean id="helloworld" class="HelloWorld">
-        <property name="name" value="Spring"></property>
-    </bean>
+    <!--<bean id="helloworld" class="HelloWorld">-->
+        <!--<property name="name" value="Spring"></property>-->
+    <!--</bean>-->
 
     <bean id="car1" class="Car">
             <constructor-arg value="Audi"></constructor-arg>
             <constructor-arg value="120"></constructor-arg>
             <constructor-arg value="black"></constructor-arg>
+    </bean>
+
+    <bean id="car2" class="Car">
+        <constructor-arg value="Ford"></constructor-arg>
+        <constructor-arg value="100"></constructor-arg>
+        <constructor-arg value="Yellow"></constructor-arg>
+    </bean>
+
+    <bean id="car3" class="Car">
+        <constructor-arg value="Toyota"></constructor-arg>
+        <constructor-arg value="80"></constructor-arg>
+        <constructor-arg value="green"></constructor-arg>
     </bean>
 
     <bean id="p1" class="Person">
@@ -51,7 +64,7 @@
         <!--引用外部Bean-->
         <property name="car" ref="car1"></property>
         <!--级联属性赋值-->
-        <property name="car.price" value="300000"></property>
+        <!--<property name="car.price" value="300000"></property>-->
     </bean>
 
     <bean id="p2" class="Person">
@@ -67,7 +80,27 @@
         </property>
     </bean>
 
+    <bean id="p3" class="Person">
+        <property name="name" value="mayu"></property>
+        <property name="age" value="18"></property>
+        <!--集合属性，使用ref来配置子节点信息-->
+        <property name="cars">
+            <list>
+                <ref bean="car1"></ref>
+                <ref bean="car2"></ref>
+                <ref bean="car3"></ref>
+            </list>
+        </property>
+    </bean>
 
+    <!--通过P命名空间为Bean属性赋值，相对于传统的配置方式更加简洁 -->
+    <bean id="p4" class="Person" p:name="mayu" p:age="18" p:car-ref="car1">
+    </bean>
 
+    <context:property-placeholder location="db.properties"></context:property-placeholder>
+    <bean id="p5" class="Person">
+        <property name="name" value="${name}"></property>
+        <property name="age" value="${age}"></property>
+    </bean>
 
 </beans>

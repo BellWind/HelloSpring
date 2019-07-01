@@ -1,7 +1,10 @@
+import java.util.List;
+
 public class Person {
     private String name;
     private int age;
     private Car car;
+    private List<Car> cars;
 
     public void setName(String name) {
         this.name = name;
@@ -15,16 +18,16 @@ public class Person {
         this.car = car;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
     public Car getCar() {
         return car;
+    }
+
+    public List<Car> getCars() {
+        return cars;
+    }
+
+    public void setCars(List<Car> cars) {
+        this.cars = cars;
     }
 
     @Override
@@ -32,7 +35,7 @@ public class Person {
         return "Person{" +
                 "name='" + name + '\'' +
                 ", age=" + age +
-                ", car=" + car +
+                ", cars=" + cars +
                 '}';
     }
 }
