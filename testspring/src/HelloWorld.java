@@ -8,6 +8,6 @@ public class HelloWorld {
         System.out.println("初始化构造器");
     }
     public void hello() {
-        System.out.println("Hello"+name);
+        System.out.println("Hello" + name);
     }
 }

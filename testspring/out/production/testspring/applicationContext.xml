@@ -28,14 +28,46 @@
         <!--<property name="basename" value="i18n"></property>-->
     <!--</bean>-->
 
-    <bean id="helloworld" class="HelloWorld">
-        <property name="name" value="Spring"></property>
-    </bean>
-
     <!--&lt;!&ndash; 配置直接转发的页面 &ndash;&gt;-->
     <!--&lt;!&ndash; 可以直接相应转发的页面, 而无需再经过 Handler 的方法.  &ndash;&gt;-->
     <!--<mvc:view-controller path="/success" view-name="success"/>-->
 
     <!--&lt;!&ndash; 在实际开发中通常都需配置 mvc:annotation-driven 标签 &ndash;&gt;-->
     <!--<mvc:annotation-driven></mvc:annotation-driven>-->
+
+    <bean id="helloworld" class="HelloWorld">
+        <property name="name" value="Spring"></property>
+    </bean>
+
+    <bean id="car1" class="Car">
+            <constructor-arg value="Audi"></constructor-arg>
+            <constructor-arg value="120"></constructor-arg>
+            <constructor-arg value="black"></constructor-arg>
+    </bean>
+
+    <bean id="p1" class="Person">
+        <property name="name" value="mayu"></property>
+        <property name="age" value="18"></property>
+        <!--引用外部Bean-->
+        <property name="car" ref="car1"></property>
+        <!--级联属性赋值-->
+        <property name="car.price" value="300000"></property>
+    </bean>
+
+    <bean id="p2" class="Person">
+        <property name="name" value="mayu"></property>
+        <property name="age" value="18"></property>
+        <!--内部Bean-->
+        <property name="car">
+            <bean class="Car">
+                <constructor-arg value="Benz"></constructor-arg>
+                <constructor-arg value="60"></constructor-arg>
+                <constructor-arg value="white"></constructor-arg>
+            </bean>
+        </property>
+    </bean>
+
+
+
+
 </beans>
