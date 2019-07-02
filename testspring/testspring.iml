@@ -61,5 +61,28 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Program Files/Java/jdk1.8.0_192/lib/aspectj-1.9.4.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://C:/Program Files/Java/jdk1.8.0_192/lib/aspectj-1.9.4.jar!/files/doc/runtime-apidocs" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://C:/Program Files/Java/jdk1.8.0_192/lib/aspectj-1.9.4.jar!/files/doc/examples" />
+          <root url="jar://C:/Program Files/Java/jdk1.8.0_192/lib/aspectj-1.9.4.jar!/files/doc/examples/ltw" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Program Files/Java/jdk1.8.0_192/lib/aspectj-1.9.4/files/lib/aspectjweaver.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

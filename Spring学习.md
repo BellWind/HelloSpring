@@ -305,3 +305,49 @@ xml文件：
 
 ### ![img](https://img2018.cnblogs.com/blog/1082754/201810/1082754-20181030104208937-1907545744.png)
 
+
+
+## 通过注解方式配置Bean
+
+首先再导入一个jar包，名为：spring-aop-4.3.6.RELEASE.jar。
+
+然后创建如下包和类、接口：
+
+```
++-- anotation
+  +-- controller
+    |-- UserController
+  +-- repository
+    |-- UserRepository(接口)
+    |-- UserRepositoryImlp
+  +-- service
+  	|-- UserService
+  |--Main
+```
+
+**组件扫描**：spring自动扫描classpath，侦测和实例化具有特定注解的组件。
+
+**特定组件**：
+
+1.**@Componenet**：基本注解；
+
+2.**@Respository**：标识持久层组件；
+
+3.**@Service**：标识业务层组件；
+
+4.**@Controller**：标识表现层组件。
+
+之后还需要在配置xml文件configAutowire.xml中加上一句：
+
+```xml
+<context:component-scan base-package="anotation" />
+```
+
+Main函数内容：
+
+```java
+ApplicationContext ctx = new ClassPathXmlApplicationContext("configAutowire.xml");UserController 
+userController = (UserController) ctx.getBean("userController");
+userController.excute();
+```
+
