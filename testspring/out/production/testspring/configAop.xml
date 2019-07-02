@@ -15,6 +15,6 @@
     <!-- 配置文件中启动AspectJ的注解功能 ,默认是false，要将其改为true -->
     <aop:aspectj-autoproxy proxy-target-class="true" />
     <bean class="aop.Mayu" />
-    <bean class="aop.Lulu" />
+    <!--<bean class="aop.Lulu" />-->
 
 </beans>

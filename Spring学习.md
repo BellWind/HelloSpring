@@ -254,7 +254,7 @@ System.out.println(car);
 
 *Q：为什么在bean id为p1的bean中赋值price为300000会影响到它上面的bean id为car1的bean类？*
 
-*A：请看第7点：Bean的作用域。*
+*A：请看第7点：Bean的作用域。默认情况下Spring返回的实例都是单例的：一旦容器中注册了实例对象，应用程序需要的时候，就直接给予，不会重复创建。*
 
 ### 6.使用命名空间赋值
 
@@ -325,7 +325,9 @@ xml文件：
   |--Main
 ```
 
-**组件扫描**：spring自动扫描classpath，侦测和实例化具有特定注解的组件。
+[具体代码](https://github.com/BellWind/HelloSpring/tree/master/testspring/src/anotation)
+
+组件扫描**：spring自动扫描classpath，侦测和实例化具有特定注解的组件。
 
 **特定组件**：
 
@@ -337,17 +339,155 @@ xml文件：
 
 4.**@Controller**：标识表现层组件。
 
+**这四个注解目前的功能都是一样的**，注解名的不同为了能够让标记类本身的用途更加清晰。
+
+**Spring 有默认的命名策略**: 使用非限定类名, 第一个字母小写. 也可以在注解中通过 value 属性值标识组件的名称。
+
+比如在此Demo中，UserController类名前的`@Component`等同于于`@Component(value="userController")`。使用`getBean("userController")`可以实例化一个该类对象。
+
+常用：
+
+`@Component(value = "car") `相当于在配置文件中`<bean id="car" class="……"></bean`。
+
+`@Scope(value = "prototype") `配置创建对象是否是以单列模式进行创建。
+
 之后还需要在配置xml文件configAutowire.xml中加上一句：
 
 ```xml
 <context:component-scan base-package="anotation" />
 ```
 
+需要扫描多个包时, 可以使用逗号分隔。
+
 Main函数内容：
 
 ```java
-ApplicationContext ctx = new ClassPathXmlApplicationContext("configAutowire.xml");UserController 
-userController = (UserController) ctx.getBean("userController");
+ApplicationContext ctx = new ClassPathXmlApplicationContext("configAutowire.xml");
+UserController userController = (UserController) ctx.getBean("userController");
 userController.excute();
 ```
+
+会依次构造UserController、UserService和UserRepositoryImlp实例。
+
+*Q：注解方式配置Bean，是不是没办法给类成员变量赋值？*
+
+*A：...*
+
+
+
+## AOP
+
+参考此文一起食用[Spring AOP（面向切面示例）](https://www.cnblogs.com/hq233/p/6637488.html)。
+
+### 首先需要了解的名词
+
+**切面(aspect)**：横切关注点被模块化的特殊对象。
+
+**通知(advice)**：切面必须要完成的工作。切面中的每个方向称之为通知。通知是在切面对象中的。
+
+**目标(target)**：被通知的对象。
+
+**代理(proxy)**：向目标对象应用通知后创建的对象。
+
+**连接点（joinpoint）**：目标对象的程序执行的某个特定位置。如某个方法调用前，调用后的位置。包括两个信息：目标程序的哪个方法？方法执行 前还是执行后？
+
+**切点(pointcut)**：每个类会有多个连接点，AOP通过切点定位到特定的边接点。类比，连接点相当于数所成方圆 中的记录，而切点相当于查询条件。一个切点匹配多个连接点。
+
+利用aop和注解来实例化的示例如下：
+
+接口：
+
+```java
+public interface Human {    
+	public void eat();    
+	public void sleep();
+}
+```
+
+类：
+
+```java
+@Componentpublic 
+class Mayu implements Human {    
+	@Override    
+	public void eat() {        
+		System.out.println("mayu吃饭了。");    
+	}    
+	@Override    
+	public void sleep() {        
+		System.out.println("mayu睡觉了。");    
+	}
+}
+```
+
+切面类：
+
+```java
+@Aspect //声明该类是切面类
+@Component//配置文件中启动自动扫描功能
+public class HumanAspect {    
+
+	@Before("execution(* aop.*.eat(..))") //在吃饭前先洗手    
+	public void wash() {        
+		System.out.println("先洗手啦~");    
+	}    
+	
+	@After("execution(* aop.*.eat(..))") //吃饭后刷牙    
+	public void brush() {        
+		System.out.println("然后刷牙啦~");    
+	}    
+	
+	@Before("execution(* aop.*.sleep(..))") //睡觉前先看会书    
+	public void read() {        
+		System.out.println("先看会书~ ");    
+	}
+}
+```
+
+xml配置中加入：
+
+```xml
+<context:component-scan base-package="aop" />
+<!-- 配置文件中启动AspectJ的注解功能 ,默认是false，要将其改为true -->
+<aop:aspectj-autoproxy proxy-target-class="true" />
+```
+
+Main函数构造一个Mayu类的Bean实例：
+
+```java
+ApplicationContext context = new ClassPathXmlApplicationContext("configAop.xml");
+Mayu m = (Mayu)context.getBean(Mayu.class);
+m.eat();
+m.sleep();
+```
+
+输出结果：
+
+```
+先洗手啦~
+mayu吃饭了。
+然后刷牙啦~
+先看会书~ 
+mayu睡觉了。
+```
+
+**需要注意的点**：
+
+`"execution(* aop.*.eat(..))"`该行代码含义：
+
+1.**第一个*号**：表示返回类型，*号表示所有的类型；
+
+2.**包名**：表示需要拦截的包名；
+
+3.**第二个*号**：通配符；
+
+4.**`eat(..)`中的..**：..代表所有形参，不管有多少。
+
+*Q：在xml配置中加入`<!--<bean class="aop.Mayu" />-->`之后，出现编译错误：*
+
+*`No qualifying bean of type 'aop.Mayu' available: expected single matching bean but found 2: mayu,aop.Mayu#0`*
+
+*这是为何？*
+
+*A：...*
 

@@ -15,12 +15,12 @@ public class HumanAspect {
         System.out.println("先洗手啦~");
     }
 
-    @After("execute(* aop.*.eat(..))") //吃饭后刷牙
+    @After("execution(* aop.*.eat(..))") //吃饭后刷牙
     public void brush() {
         System.out.println("然后刷牙啦~");
     }
 
-    @Before("execute(* aop.*.sleep(..))") //睡觉前先看会书
+    @Before("execution(* aop.*.sleep(..))") //睡觉前先看会书
     public void read() {
         System.out.println("先看会书~ ");
     }
