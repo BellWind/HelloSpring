@@ -252,18 +252,20 @@ System.out.println(car);
 </bean>
 ```
 
+### 6.Q&A
+
 *Q：为什么在bean id为p1的bean中赋值price为300000会影响到它上面的bean id为car1的bean类？*
 
-*A：请看第7点：Bean的作用域。默认情况下Spring返回的实例都是单例的：一旦容器中注册了实例对象，应用程序需要的时候，就直接给予，不会重复创建。*
+*A：请看第8点：Bean的作用域。默认情况下Spring返回的实例都是单例的：一旦容器中注册了实例对象，应用程序需要的时候，就直接给予，不会重复创建。*
 
-### 6.使用命名空间赋值
+### 7.使用命名空间赋值
 
 ```xml
 <!--通过P命名空间为Bean属性赋值，相对于传统的配置方式更加简洁 -->
 <bean id="p4" class="Person" p:name="mayu" p:age="18" p:car-ref="car1"></bean>
 ```
 
-### 7.Bean的作用域
+### 8.Bean的作用域
 
 ```java
 Person p1 = (Person)ctx.getBean("p1", Person.class);
@@ -279,7 +281,7 @@ System.out.println(p1 == p2);
 
 **prototype**：原型的，容器初始化时不创建Bean的实例，而在每次请求时都创建一个新的Bean的实例，并返回。
 
-### 8.使用外部属性文件
+### 9.使用外部属性文件
 
 使用property-placeholder 属性占位符。
 
@@ -301,13 +303,15 @@ xml文件：
 </bean>
 ```
 
-### 9.Bean的生命周期
+### 10.Bean的生命周期
 
-### ![img](https://img2018.cnblogs.com/blog/1082754/201810/1082754-20181030104208937-1907545744.png)
+### ![img](https://cdn.nlark.com/lark/0/2019/png/224206/1562055842874-d910fd03-0eed-4cb6-9ee9-24c7de6c9a20.png?OSSAccessKeyId=LTAIX2KDHwZymFhr&Expires=1562057773&Signature=3qX%2BL5YHl5dwz5HzdwDubqOi4Ng%3D)
 
 
 
 ## 通过注解方式配置Bean
+
+### 1.需要预先加载的jar包
 
 首先再导入一个jar包，名为：spring-aop-4.3.6.RELEASE.jar。
 
@@ -325,11 +329,13 @@ xml文件：
   |--Main
 ```
 
+### 2.具体代码
+
 [具体代码](https://github.com/BellWind/HelloSpring/tree/master/testspring/src/anotation)
 
 组件扫描**：spring自动扫描classpath，侦测和实例化具有特定注解的组件。
 
-**特定组件**：
+### 3.特定组件
 
 1.**@Componenet**：基本注解；
 
@@ -340,6 +346,8 @@ xml文件：
 4.**@Controller**：标识表现层组件。
 
 **这四个注解目前的功能都是一样的**，注解名的不同为了能够让标记类本身的用途更加清晰。
+
+### 4.其他注意的点
 
 **Spring 有默认的命名策略**: 使用非限定类名, 第一个字母小写. 也可以在注解中通过 value 属性值标识组件的名称。
 
@@ -369,6 +377,8 @@ userController.excute();
 
 会依次构造UserController、UserService和UserRepositoryImlp实例。
 
+### 5.Q&A
+
 *Q：注解方式配置Bean，是不是没办法给类成员变量赋值？*
 
 *A：...*
@@ -379,7 +389,7 @@ userController.excute();
 
 参考此文一起食用[Spring AOP（面向切面示例）](https://www.cnblogs.com/hq233/p/6637488.html)。
 
-### 首先需要了解的名词
+### 1.首先需要了解的名词
 
 **切面(aspect)**：横切关注点被模块化的特殊对象。
 
@@ -393,7 +403,7 @@ userController.excute();
 
 **切点(pointcut)**：每个类会有多个连接点，AOP通过切点定位到特定的边接点。类比，连接点相当于数所成方圆 中的记录，而切点相当于查询条件。一个切点匹配多个连接点。
 
-利用aop和注解来实例化的示例如下：
+### 2.利用aop和注解来实例化的示例
 
 接口：
 
@@ -471,7 +481,7 @@ mayu吃饭了。
 mayu睡觉了。
 ```
 
-**需要注意的点**：
+### 3.需要注意的点
 
 `"execution(* aop.*.eat(..))"`该行代码含义：
 
@@ -483,6 +493,8 @@ mayu睡觉了。
 
 4.**`eat(..)`中的..**：..代表所有形参，不管有多少。
 
+### 4.Q&A
+
 *Q：在xml配置中加入`<!--<bean class="aop.Mayu" />-->`之后，出现编译错误：*
 
 *`No qualifying bean of type 'aop.Mayu' available: expected single matching bean but found 2: mayu,aop.Mayu#0`*
@@ -490,4 +502,3 @@ mayu睡觉了。
 *这是为何？*
 
 *A：...*
-
